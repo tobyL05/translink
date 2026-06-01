@@ -16,3 +16,6 @@ class Stop(BaseModel):
     rt_stop_id: str | None = None
     wheelchair_boarding: Literal[0, 1, 2] | None = None
     parent_station: ParentStation | None = None
+
+class StopWithStopId(Stop):
+    stop_id: str

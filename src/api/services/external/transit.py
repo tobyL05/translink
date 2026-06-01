@@ -3,7 +3,7 @@ import os
 from typing import Any
 from pprint import pprint
 from dotenv import load_dotenv
-from api.schemas import StopDeparturesResponse
+from src.api.schemas import StopDeparturesResponse, SearchStopsResponse
 
 import httpx
 
@@ -56,9 +56,31 @@ class TransitApi:
         )
         return StopDeparturesResponse.model_validate(response)
 
+
+    async def search_stops(
+        self,
+        stop_id: str,
+        *,
+        lat: float,
+        lon: float,
+    ) -> SearchStopsResponse:
+        """GET /v4/public/search_stops — search stops by name or code."""
+        response = await self._get(
+            "/v4/public/search_stops",
+            {
+                "query": stop_id,
+                "lat": lat,
+                "lon": lon
+            },
+        )
+        return SearchStopsResponse.model_validate(response)
+
+__all__ = ["TransitApi"]
+
 async def test():
     async with TransitApi() as api:
-        res = await api.get_stop_departures("TSL:71358")
+        # res = await api.get_stop_departures("TSL:71358")
+        res = await api.search_stops("61701", lat=49, lon=-123)
         pprint(res)
 
 if __name__ == "__main__":

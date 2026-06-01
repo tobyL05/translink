@@ -2,10 +2,10 @@ from .active_period import ActivePeriod
 from .informed_entity import InformedEntity
 from .service_alert import ServiceAlert
 from .parent_station import ParentStation
-from .stop import Stop
+from .stop import Stop, StopWithStopId
 from .display_short_name import DisplayShortName
 from .price import Price
-from .fare import Fare
+from .fare import Fare 
 from .vehicle import Vehicle
 from .schedule_item import ScheduleItem, ScheduleItemWithInternalId
 from .itinerary import Itinerary, ItineraryWithInternalId
@@ -28,4 +28,5 @@ __all__ = [
     "ItineraryWithInternalId",
     "MergedItinerary",
     "RouteDeparture",
+    "StopWithStopId",
 ]
