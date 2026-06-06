@@ -1,4 +1,5 @@
 import asyncio
+from logging import getLogger
 import os
 from typing import Any
 from pprint import pprint
@@ -9,8 +10,11 @@ import httpx
 
 BASE_URL = "https://external.transitapp.com"
 
+logger = getLogger(__name__)
+
 class TransitApi:
     def __init__(self, api_key: str | None = None):
+        logger.info("Starting TransitAPI")
         self._api_key = api_key or os.environ["TRANSIT_API_KEY"]
         self._client = httpx.AsyncClient(
             base_url=BASE_URL,
@@ -39,10 +43,11 @@ class TransitApi:
         time: int | None = None,
         remove_cancelled: bool = False,
         should_update_realtime: bool = True,
-        max_num_departures: int = 3,
+        max_num_departures: int = 6,
         include_stops_and_shapes: bool = False,
     ) -> StopDeparturesResponse:
         """GET /v4/public/stop_departures — upcoming departures for one or more stops."""
+        logger.info("Fetching stop departures.", extra={"global_stop_ids": global_stop_ids})
         response = await self._get(
             "/v4/public/stop_departures",
             {

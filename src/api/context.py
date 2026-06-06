@@ -1,8 +1,10 @@
 import json
 from pathlib import Path
 from src.api.services.external.transit import TransitApi
+from src.api.services.broadcaster import DeparturesBroadcaster
 
 transit_api: TransitApi | None = None
+departures_broadcaster = DeparturesBroadcaster()
 STOP_JSON_PATH = Path(__file__).resolve().parents[2] / "data/stops.json"
 GLOBAL_STOP_ID_MAPPING: dict[int, str] = {}
 stops: set[int] = set()
