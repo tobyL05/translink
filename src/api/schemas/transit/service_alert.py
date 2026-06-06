@@ -9,7 +9,7 @@ class ServiceAlert(BaseModel):
     effect: Literal[
         "NO_SERVICE", "REDUCED_SERVICE", "SIGNIFICANT_DELAYS", "DETOUR",
         "ADDITIONAL_SERVICE", "MODIFIED_SERVICE", "OTHER_EFFECT",
-        "UNKNOWN_EFFECT", "STOP_MOVED", "NO_EFFECT",
+        "UNKNOWN_EFFECT", "STOP_MOVED", "NO_EFFECT", "TRIP_CANCELLED",
     ]
     cause: Literal[
         "UNKNOWN_CAUSE", "OTHER_CAUSE", "TECHNICAL_PROBLEM", "STRIKE",
