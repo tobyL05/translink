@@ -10,4 +10,8 @@ wheels/
 .venv
 .env
 .DS_STORE
-data
+
+# Generated files
+gtfs.db
+google_transit/
+data/
