@@ -25,7 +25,9 @@ async def add_stops(stop_ids: list[str], lat: float, lon: float) -> None:
     seen_global_ids = {s["global_stop_id"] for s in existing if s.get("global_stop_id")}
 
     async with TransitApi() as api:
-        for stop_id in stop_ids:
+        for i, stop_id in enumerate(stop_ids):
+            if i > 0:
+                await asyncio.sleep(5.0)
             response = await api.search_stops(stop_id, lat=lat, lon=lon)
 
             if not response.results:
@@ -49,27 +51,37 @@ async def add_stops(stop_ids: list[str], lat: float, lon: float) -> None:
             }
 
             # Update an existing placeholder entry if one exists for this stop_id
-            placeholder = next((s for s in existing if str(s.get("stop_id")) == stop_id), None)
+            placeholder = next(
+                (s for s in existing if str(s.get("stop_id")) == stop_id), None
+            )
             if placeholder:
                 placeholder.update(entry)
             else:
                 existing.append(entry)
 
             seen_global_ids.add(best.global_stop_id)
-            print(f"Added: {best.stop_name} ({best.global_stop_id}) [match: {best.match_strength:.2f}]")
+            print(
+                f"Added: {best.stop_name} ({best.global_stop_id}) [match: {best.match_strength:.2f}]"
+            )
 
     save_stops(existing)
     print(f"\nSaved {len(existing)} stops to {STOPS_FILE}")
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Resolve local stop IDs to global stop IDs and save to stops.json")
-    parser.add_argument("stop_ids", nargs="+", help="Local stop IDs or names to search for")
+    parser = argparse.ArgumentParser(
+        description="Resolve local stop IDs to global stop IDs and save to stops.json"
+    )
+    parser.add_argument(
+        "stop_ids", nargs="+", help="Local stop IDs or names to search for"
+    )
     args = parser.parse_args()
 
     load_dotenv()
+    print("adding stops..")
     asyncio.run(add_stops(args.stop_ids, 49, -123))
 
 
 if __name__ == "__main__":
+    print("running..")
     main()
